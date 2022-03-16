@@ -1,6 +1,6 @@
 from django import VERSION
 from django import forms
-from django.conf.urls import url
+from django.urls import re_path
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
@@ -22,7 +22,6 @@ def patterns(prefix, *args):
 
 
 class AdminRowActionsMixin(object):
-
     """ModelAdmin mixin to add row actions just like adding admin actions"""
 
     rowactions = []
@@ -35,7 +34,7 @@ class AdminRowActionsMixin(object):
         css['all'].extend(["css/jquery.dropdown.min.css"])
 
         js = super(AdminRowActionsMixin, self).media._js
-        js.extend(["js/jquery.dropdown.min.js",])
+        js.extend(["js/jquery.dropdown.min.js", ])
 
         media = forms.Media(
             css=css, js=js
@@ -98,6 +97,7 @@ class AdminRowActionsMixin(object):
             else:
                 return mark_safe(html)
         return ''
+
     _row_actions.short_description = ''
 
     if VERSION < (1, 9):
@@ -109,9 +109,9 @@ class AdminRowActionsMixin(object):
 
         my_urls = patterns(
             '',
-            url(r'^(?P<pk>[0-9a-f-]+)/rowactions/(?P<tool>\w+)/$',
-                self.admin_site.admin_view(ModelToolsView.as_view(model=self.model))
-            )
+            re_path(r'^(?P<pk>[0-9a-f-]+)/rowactions/(?P<tool>\w+)/$',
+                    self.admin_site.admin_view(ModelToolsView.as_view(model=self.model))
+                    )
         )
         return my_urls
 
